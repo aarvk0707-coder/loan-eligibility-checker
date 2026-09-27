@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI Loan Eligibility Checker</title>
+<style>
+:root{--bg:#0b1020;--panel:#131a2e;--panel2:#19223a;--text:#f4f7ff;--muted:#a9b4cc;--line:#2b3552;--purple:#8b5cf6;--cyan:#22d3ee;--green:#34d399;--red:#fb7185}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:radial-gradient(ellipse at top right,#252052 0,transparent 40%),var(--bg);color:var(--text);line-height:1.5}
+header{position:sticky;top:0;z-index:5;background:#0b1020eF;backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+.nav{max-width:1180px;margin:auto;padding:16px 22px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.brand{display:flex;align-items:center;gap:11px;font-weight:800;letter-spacing:.2px}.logo{width:39px;height:39px;border-radius:13px;background:linear-gradient(135deg,var(--purple),var(--cyan));display:grid;place-items:center;font-size:21px;box-shadow:0 8px 25px #8b5cf644}
+nav{display:flex;gap:7px;flex-wrap:wrap}nav a{color:var(--muted);text-decoration:none;padding:9px 13px;border-radius:10px;font-size:14px}nav a:hover,nav a.active{background:#ffffff12;color:white}
+.wrap{max-width:1180px;margin:auto;padding:30px 22px 60px}.hero{display:grid;grid-template-columns:1.15fr .85fr;gap:24px;align-items:center;margin:20px 0 30px}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;background:#8b5cf61c;color:#c4b5fd;border:1px solid #8b5cf64d;padding:6px 11px;border-radius:99px;font-size:12px;font-weight:700}
+h1{font-size:clamp(32px,5vw,55px);line-height:1.08;letter-spacing:-1.8px;margin:17px 0}h1 span{background:linear-gradient(90deg,#a78bfa,#67e8f9);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{color:var(--muted);font-size:17px;max-width:650px}.hero-card{background:linear-gradient(145deg,#1c2541,#11182b);border:1px solid #343e60;border-radius:24px;padding:25px;box-shadow:0 20px 70px #0004}
+.hero-card .big{font-size:40px;font-weight:850;letter-spacing:-1px}.hero-card p{color:var(--muted);margin:3px 0 20px}.mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.mini{background:#ffffff08;border:1px solid var(--line);border-radius:14px;padding:14px}.mini strong{display:block;font-size:20px}.mini small{color:var(--muted)}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:28px 0 18px}.tab{border:1px solid var(--line);background:#141b2e;color:var(--muted);padding:11px 17px;border-radius:12px;cursor:pointer;font-weight:700}.tab.active,.tab:hover{background:linear-gradient(120deg,var(--purple),#5b5ce2);border-color:transparent;color:white}
+.section{display:none}.section.active{display:block}.panel{background:linear-gradient(150deg,#151d32,#101729);border:1px solid var(--line);border-radius:20px;padding:25px;margin-bottom:22px}.panel h2{margin:0 0 7px;font-size:23px}.sub{color:var(--muted);margin:0 0 22px;font-size:14px}
+.formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:17px}.field label{display:block;color:#dce3f5;font-size:13px;font-weight:700;margin-bottom:8px}.field input,.field select{width:100%;background:#0b1223;color:white;border:1px solid #35405e;border-radius:11px;padding:13px 14px;font-size:15px;outline:none}.field input:focus,.field select:focus{border-color:var(--purple);box-shadow:0 0 0 3px #8b5cf622}
+.btn{border:0;border-radius:12px;padding:14px 20px;font-size:15px;font-weight:800;color:white;background:linear-gradient(110deg,var(--purple),#575be8);cursor:pointer;box-shadow:0 8px 24px #6255db35}.btn:hover{filter:brightness(1.1);transform:translateY(-1px)}.btn.secondary{background:#252f49;box-shadow:none;border:1px solid #3a4564}.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:20px}
+.result{display:none;margin-top:22px;background:#0b1424;border:1px solid var(--line);border-radius:16px;padding:20px}.result.show{display:block}.result-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}.pill{border-radius:99px;padding:6px 11px;font-size:12px;font-weight:800;background:#10b98122;color:#6ee7b7}.pill.warn{background:#f59e0b22;color:#fbbf24}.result h3{margin:10px 0 5px;font-size:24px}.result p{color:var(--muted);margin:0}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:17px}.stat{background:#ffffff08;border:1px solid var(--line);border-radius:13px;padding:14px}.stat small{display:block;color:var(--muted);font-size:12px}.stat strong{font-size:19px;display:block;margin-top:5px}
+.emi-layout{display:grid;grid-template-columns:1fr 1fr;gap:22px}.range-row{margin:22px 0}.range-top{display:flex;justify-content:space-between;gap:12px;margin-bottom:8px;font-size:14px}.range-top strong{color:#c4b5fd}input[type=range]{width:100%;accent-color:var(--purple)}
+.emi-output{text-align:center;display:grid;place-content:center;min-height:270px;background:radial-gradient(circle at center,#31265d,#12192c 68%);border:1px solid #44386c;border-radius:18px;padding:22px}.emi-output small{color:var(--muted)}.emi-output .amount{font-size:clamp(30px,4vw,43px);font-weight:850;margin:5px 0 18px}.breakdown{display:grid;grid-template-columns:1fr 1fr;gap:10px;text-align:left}.breakdown div{padding:12px;background:#ffffff0a;border-radius:10px}.breakdown small{display:block}.breakdown strong{font-size:15px}
+.score-gauge{width:180px;height:180px;border-radius:50%;margin:20px auto;background:conic-gradient(var(--green) 0deg 250deg,#2a3450 250deg 360deg);display:grid;place-items:center;position:relative}.score-gauge:before{content:"";position:absolute;inset:12px;background:#131a2e;border-radius:50%}.score-inner{position:relative;text-align:center}.score-inner strong{font-size:38px;display:block}.score-inner small{color:var(--muted)}
+.tipgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.tip{background:#ffffff06;border:1px solid var(--line);border-radius:16px;padding:20px}.tip .icon{font-size:25px}.tip h3{margin:10px 0 6px;font-size:17px}.tip p{margin:0;color:var(--muted);font-size:14px}
+footer{border-top:1px solid var(--line);padding:25px 22px;text-align:center;color:var(--muted);font-size:13px}.disclaimer{font-size:12px;color:#8793ad;margin-top:16px}
+@media(max-width:800px){.hero{grid-template-columns:1fr}.hero-card{max-width:none}.tipgrid{grid-template-columns:1fr 1fr}.emi-layout{grid-template-columns:1fr}.nav{align-items:flex-start;flex-direction:column}.wrap{padding:22px 15px 45px}}
+@media(max-width:520px){.formgrid,.stats,.tipgrid{grid-template-columns:1fr}.panel{padding:18px}.nav{padding:13px 15px}nav a{padding:8px 10px}.hero-card{padding:20px}.mini-grid{gap:8px}}
+</style>
+</head>
+<body>
+<header><div class="nav">
+  <div class="brand"><div class="logo">₹</div><span>FinWise <span style="color:#a78bfa">AI</span></span></div>
+  <nav><a href="#home" class="active" onclick="navTo('home',this)">Home</a><a href="#workspace" onclick="navTo('workspace',this)">Workspace</a><a href="#tips" onclick="navTo('tips',this)">Financial Tips</a></nav>
+</div></header>
+<main class="wrap" id="home">
+  <section class="hero">
+    <div><div class="eyebrow">✦ SMART FINANCE • STUDENT PROJECT</div>
+      <h1>Make smarter money moves with <span>AI-ready tools.</span></h1>
+      <p class="lead">Check estimated loan eligibility, understand your credit score, calculate monthly EMIs, and explore simple financial tips — all in one clean dashboard.</p>
+      <div class="actions"><button class="btn" onclick="showTab('eligibility')">Check Loan Eligibility →</button><button class="btn secondary" onclick="showTab('emi')">Calculate EMI</button></div>
+    </div>
+    <div class="hero-card"><div class="eyebrow">YOUR FINANCE SNAPSHOT</div><div class="big">Plan. Check. Grow.</div><p>Simple tools to help you understand your numbers before applying.</p><div class="mini-grid"><div class="mini"><strong>01</strong><small>Loan eligibility</small></div><div class="mini"><strong>02</strong><small>Credit score guide</small></div><div class="mini"><strong>03</strong><small>EMI calculator</small></div><div class="mini"><strong>04</strong><small>Money tips</small></div></div></div>
+  </section>
+  <div class="tabs" id="workspace"><button class="tab active" data-tab="eligibility" onclick="showTab('eligibility')">Loan Eligibility</button><button class="tab" data-tab="credit" onclick="showTab('credit')">Credit Score</button><button class="tab" data-tab="emi" onclick="showTab('emi')">EMI Calculator</button><button class="tab" data-tab="tips" onclick="showTab('tips')">AI Financial Tips</button></div>
+
+  <section class="section active" id="eligibility">
+    <div class="panel"><h2>Loan Eligibility Checker</h2><p class="sub">Enter your details to get a basic estimate. This is an educational calculation, not a bank approval.</p>
+      <form id="loanForm"><div class="formgrid">
+        <div class="field"><label for="name">Full name</label><input id="name" placeholder="e.g. Aarav" required /></div>
+        <div class="field"><label for="income">Monthly income (₹)</label><input id="income" type="number" min="0" placeholder="45000" required /></div>
+        <div class="field"><label for="expenses">Existing monthly EMIs (₹)</label><input id="expenses" type="number" min="0" value="0" required /></div>
+        <div class="field"><label for="loanType">Loan type</label><select id="loanType"><option value="personal">Personal loan</option><option value="home">Home loan</option><option value="vehicle">Vehicle loan</option><option value="education">Education loan</option></select></div>
+        <div class="field"><label for="tenure">Preferred tenure</label><select id="tenure"><option value="3">3 years</option><option value="5" selected>5 years</option><option value="10">10 years</option><option value="20">20 years</option></select></div>
+        <div class="field"><label for="credit">Credit score (if known)</label><input id="credit" type="number" min="300" max="900" placeholder="e.g. 750" /></div>
+      </div><div class="actions"><button class="btn" type="submit">Check My Estimate</button><button class="btn secondary" type="reset" onclick="document.getElementById('loanResult').classList.remove('show')">Reset</button></div></form>
+      <div class="result" id="loanResult" aria-live="polite"></div>
+      <p class="disclaimer">Estimate uses a simplified EMI affordability rule (up to 40% of monthly income toward total EMIs). Actual eligibility depends on lender policies, documents, credit history, interest rate, and other factors.</p>
+    </div>
+  </section>
+
+  <section class="section" id="credit"><div class="panel"><h2>Credit Score Analyzer</h2><p class="sub">Enter a score between 300 and 900 to see a general score range and learning tips.</p>
+    <div class="formgrid"><div class="field"><label for="scoreInput">Your credit score</label><input id="scoreInput" type="number" min="300" max="900" placeholder="Enter score (300–900)"></div></div><div class="actions"><button class="btn" onclick="analyzeScore()">Analyze Score</button></div>
+    <div class="result" id="scoreResult" aria-live="polite"></div>
+    <p class="disclaimer">Credit-score ranges shown here are general educational guidelines. Different credit bureaus and lenders may use different criteria.</p>
+  </div></section>
+
+  <section class="section" id="emi"><div class="panel"><h2>EMI Calculator</h2><p class="sub">Adjust the loan amount, annual interest rate, and tenure to estimate your monthly payment.</p>
+    <div class="emi-layout"><div>
+      <div class="range-row"><div class="range-top"><label for="amount">Loan amount</label><strong id="amountLabel">₹5,00,000</strong></div><input type="range" id="amount" min="50000" max="5000000" step="25000" value="500000" oninput="calcEmi()"></div>
+      <div class="range-row"><div class="range-top"><label for="rate">Annual interest rate</label><strong id="rateLabel">10.5%</strong></div><input type="range" id="rate" min="4" max="24" step=".25" value="10.5" oninput="calcEmi()"></div>
+      <div class="range-row"><div class="range-top"><label for="years">Loan tenure</label><strong id="yearsLabel">5 years</strong></div><input type="range" id="years" min="1" max="30" step="1" value="5" oninput="calcEmi()"></div>
+    </div><div class="emi-output"><small>Estimated monthly EMI</small><div class="amount" id="emiAmount">₹10,747</div><div class="breakdown"><div><small>Total interest</small><strong id="totalInterest">₹1,44,820</strong></div><div><small>Total repayment</small><strong id="totalPayment">₹6,44,820</strong></div></div></div></div>
+  </div></section>
+
+  <section class="section" id="tips"><div class="panel"><h2>AI Financial Tips</h2><p class="sub">Practical starter tips to build healthy money habits.</p><div class="tipgrid">
+    <article class="tip"><div class="icon">📊</div><h3>Keep EMIs manageable</h3><p>Try to keep all monthly loan payments within a comfortable share of your take-home income.</p></article>
+    <article class="tip"><div class="icon">⏰</div><h3>Pay on time</h3><p>Set reminders or auto-pay for bills and loan payments to avoid missed due dates.</p></article>
+    <article class="tip"><div class="icon">🧾</div><h3>Check your report</h3><p>Review your credit report periodically and dispute information that looks incorrect.</p></article>
+    <article class="tip"><div class="icon">🛟</div><h3>Build an emergency fund</h3><p>Save gradually for unexpected expenses before taking on new monthly commitments.</p></article>
+    <article class="tip"><div class="icon">🔍</div><h3>Compare loan offers</h3><p>Compare the annual rate, fees, tenure, prepayment rules, and total repayment—not just the EMI.</p></article>
+    <article class="tip"><div class="icon">🔐</div><h3>Protect your data</h3><p>Never share OTPs, PINs, passwords, or sensitive banking details with unknown people.</p></article>
+  </div></div></section>
+</main>
+<footer>FinWise AI • Student Project Prototype<br><span>For educational use only. Not a bank, lender, or financial adviser.</span></footer>
+<script>
+function showTab(id){document.querySelectorAll('.section').forEach(s=>s.classList.toggle('active',s.id===id));document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===id));if(id==='emi')calcEmi();document.getElementById('workspace').scrollIntoView({behavior:'smooth',block:'start'})}
+function navTo(id,el){document.querySelectorAll('nav a').forEach(a=>a.classList.remove('active'));el.classList.add('active');if(id==='tips')showTab('tips');else if(id==='workspace')showTab('eligibility');}
+const inr=n=>'₹'+Math.round(n).toLocaleString('en-IN');
+document.getElementById('loanForm').addEventListener('submit',e=>{e.preventDefault();const income=Number(document.getElementById('income').value),existing=Number(document.getElementById('expenses').value),years=Number(document.getElementById('tenure').value),score=Number(document.getElementById('credit').value)||0,type=document.getElementById('loanType').value;
+if(income<=0||existing<0){alert('Please enter valid income and EMI values.');return}
+const maxTotal=income*.4,available=Math.max(0,maxTotal-existing),rates={personal:.15,home:.085,vehicle:.105,education:.10},rate=rates[type],r=rate/12,n=years*12,principal=available*(1-Math.pow(1+r,-n))/r;
+const scoreFactor=score&&score<650?.7:score&&score<700?.85:1;const estimate=principal*scoreFactor;const res=document.getElementById('loanResult');res.classList.add('show');res.innerHTML=`<div class="result-head"><strong>Hi ${escapeHtml(document.getElementById('name').value||'there')}! Here's your estimate</strong><span class="pill ${available===0?'warn':''}">${available>0?'Preliminary estimate':'Review your current EMIs'}</span></div><h3>${inr(estimate)}</h3><p>Approximate loan amount based on an assumed ${(rate*100).toFixed(1)}% annual interest rate and ${years}-year tenure.</p><div class="stats"><div class="stat"><small>Suggested max new EMI</small><strong>${inr(available)}</strong></div><div class="stat"><small>Estimated total EMI limit</small><strong>${inr(maxTotal)}</strong></div><div class="stat"><small>Assumed interest</small><strong>${(rate*100).toFixed(1)}%</strong></div></div><p style="margin-top:14px">This is not an approval or an offer. A lender will assess your documents, income stability, credit report, and its own rules.</p>`;});
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function analyzeScore(){const score=Number(document.getElementById('scoreInput').value),box=document.getElementById('scoreResult');if(!score||score<300||score>900){alert('Enter a score between 300 and 900.');return}let label,tips;if(score>=750){label='Generally strong';tips='Keep paying on time, maintain low credit utilization, and avoid unnecessary applications.'}else if(score>=700){label='Generally good';tips='Continue timely payments and review your report for errors.'}else if(score>=650){label='Needs improvement';tips='Pay every bill on time, reduce outstanding balances, and avoid applying for several loans at once.'}else{label='Work on building credit';tips='Check your credit report, clear overdue amounts where possible, and build a consistent repayment history.'}box.classList.add('show');box.innerHTML=`<div class="result-head"><strong>Your score range</strong><span class="pill ${score<700?'warn':''}">${label}</span></div><div class="score-gauge" style="background:conic-gradient(${score>=750?'#34d399':score>=700?'#22d3ee':'#fbbf24'} ${(score-300)/600*360}deg,#2a3450 0deg)"><div class="score-inner"><strong>${score}</strong><small>out of 900</small></div></div><p>${tips}</p>`}
+function calcEmi(){const p=Number(document.getElementById('amount').value),annual=Number(document.getElementById('rate').value),years=Number(document.getElementById('years').value),r=annual/1200,n=years*12,emi=r===0?p/n:p*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1),total=emi*n;document.getElementById('amountLabel').textContent=inr(p);document.getElementById('rateLabel').textContent=annual+'%';document.getElementById('yearsLabel').textContent=years+' years';document.getElementById('emiAmount').textContent=inr(emi);document.getElementById('totalInterest').textContent=inr(total-p);document.getElementById('totalPayment').textContent=inr(total)}
+calcEmi();
+</script>
+</body></html>
