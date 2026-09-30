@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Loan — Smart Lending, Powered by AI</title>
+<style>
+:root{
+  --navy:#0b1f3a; --navy2:#12294d; --blue:#1e5eff; --blue-d:#1248c9;
+  --ice:#f4f7fd; --white:#ffffff; --text:#33415c; --muted:#7a869e;
+  --green:#0e9f6e; --amber:#e69c12; --radius:16px;
+  --shadow:0 8px 30px rgba(11,31,58,.10); --shadow-lg:0 18px 50px rgba(11,31,58,.16);
+  --grad:linear-gradient(135deg,#1e5eff 0%,#0b1f3a 100%);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:"Segoe UI",-apple-system,BlinkMacSystemFont,Roboto,Helvetica,Arial,sans-serif;color:var(--text);background:var(--ice);line-height:1.6}
+h1,h2,h3,h4{color:var(--navy);line-height:1.25}
+img{max-width:100%}
+a{text-decoration:none;color:inherit}
+.container{max-width:1180px;margin:0 auto;padding:0 22px}
+section{padding:84px 0}
+.eyebrow{display:inline-block;background:#e7eeff;color:var(--blue);font-weight:700;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;padding:6px 14px;border-radius:99px;margin-bottom:14px}
+.sec-title{font-size:clamp(1.7rem,3.4vw,2.5rem);margin-bottom:12px}
+.sec-sub{color:var(--muted);max-width:620px;margin-bottom:40px}
+.center{text-align:center}.center .sec-sub{margin-left:auto;margin-right:auto}
+
+/* ---------- Buttons ---------- */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:13px 26px;border-radius:12px;font-weight:700;font-size:.95rem;border:none;cursor:pointer;transition:.25s;letter-spacing:.02em}
+.btn-primary{background:var(--blue);color:#fff;box-shadow:0 8px 20px rgba(30,94,255,.35)}
+.btn-primary:hover{background:var(--blue-d);transform:translateY(-2px);box-shadow:0 12px 28px rgba(30,94,255,.45)}
+.btn-dark{background:var(--navy);color:#fff}
+.btn-dark:hover{background:var(--navy2);transform:translateY(-2px)}
+.btn-outline{background:#fff;color:var(--navy);border:2px solid #dde5f2}
+.btn-outline:hover{border-color:var(--blue);color:var(--blue);transform:translateY(-2px)}
+.btn-green{background:var(--green);color:#fff}.btn-green:hover{filter:brightness(1.08);transform:translateY(-2px)}
+.btn-block{width:100%;justify-content:center}
+
+/* ---------- Navbar ---------- */
+header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);border-bottom:1px solid #e6ecf6}
+.nav{display:flex;align-items:center;justify-content:space-between;height:70px}
+.logo{display:flex;align-items:center;gap:10px;font-size:1.25rem;font-weight:800;color:var(--navy)}
+.logo-badge{width:38px;height:38px;border-radius:11px;background:var(--grad);display:grid;place-items:center;color:#fff;font-size:1.1rem;box-shadow:0 6px 14px rgba(30,94,255,.35)}
+.logo span em{font-style:normal;color:var(--blue)}
+.nav-links{display:flex;gap:4px;list-style:none}
+.nav-links a{padding:9px 13px;border-radius:9px;font-size:.88rem;font-weight:600;color:var(--text);transition:.2s}
+.nav-links a:hover{color:var(--blue);background:#eef3ff}
+.hamburger{display:none;background:none;border:none;font-size:1.6rem;color:var(--navy);cursor:pointer}
+
+/* ---------- Hero ---------- */
+.hero{background:radial-gradient(1000px 500px at 80% -10%,#dfe9ff 0%,transparent 55%),var(--ice);padding:90px 0 100px;overflow:hidden}
+.hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:56px;align-items:center}
+.hero h1{font-size:clamp(2.2rem,4.6vw,3.5rem);margin-bottom:18px}
+.hero h1 .grad{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p.lead{color:var(--muted);font-size:1.1rem;max-width:520px;margin-bottom:30px}
+.hero-cta{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:36px}
+.trust-row{display:flex;gap:26px;flex-wrap:wrap;color:var(--muted);font-size:.85rem;font-weight:600}
+.trust-row div{display:flex;align-items:center;gap:7px}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--green);display:inline-block}
+.hero-card{background:#fff;border-radius:22px;box-shadow:var(--shadow-lg);padding:30px;position:relative;animation:float 5s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+.hero-card h3{font-size:1.05rem;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.rate-line{display:flex;justify-content:space-between;align-items:baseline;padding:13px 0;border-bottom:1px dashed #e3e9f4;font-size:.92rem}
+.rate-line b{font-size:1.15rem;color:var(--navy)}
+.rate-line .tag{background:#e6f7f0;color:var(--green);font-size:.72rem;font-weight:800;padding:3px 9px;border-radius:99px}
+.spark{display:flex;align-items:flex-end;gap:6px;height:64px;margin:20px 0 6px}
+.spark i{flex:1;background:linear-gradient(180deg,#7aa3ff,#1e5eff);border-radius:5px 5px 0 0;animation:grow 1.2s ease both}
+@keyframes grow{from{height:0!important}}
+
+/* ---------- Stats bar ---------- */
+.stats{background:var(--navy);color:#fff;padding:44px 0}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;text-align:center}
+.stat b{font-size:2rem;display:block}
+.stat span{color:#9db2d8;font-size:.85rem}
+.stat b i{font-style:normal;color:#5b8bff}
+
+/* ---------- Cards / features ---------- */
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+.card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:30px;transition:.3s;border:1px solid #edf1f8}
+.card:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg);border-color:#cfe0ff}
+.icon{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;font-size:1.4rem;margin-bottom:18px;background:#e7eeff;color:var(--blue)}
+.icon.green{background:#e6f7f0;color:var(--green)}.icon.navy{background:#e8edf6;color:var(--navy)}.icon.amber{background:#fdf3e0;color:var(--amber)}
+.card h3{font-size:1.08rem;margin-bottom:8px}
+.card p{font-size:.9rem;color:var(--muted)}
+.pill{display:inline-block;margin-top:14px;font-size:.8rem;font-weight:700;color:var(--blue)}
+.pill:hover{text-decoration:underline}
+
+/* ---------- About ---------- */
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+.about-visual{background:var(--grad);border-radius:22px;padding:40px;color:#fff;box-shadow:var(--shadow-lg)}
+.about-visual h3{color:#fff;font-size:1.4rem;margin-bottom:22px}
+.check-item{display:flex;gap:12px;padding:11px 0;font-size:.95rem}
+.check-item .ck{width:26px;height:26px;flex:none;border-radius:8px;background:rgba(255,255,255,.18);display:grid;place-items:center;font-size:.85rem}
+.secure-band{margin-top:26px;background:#eaf1ff;border:1px solid #d3e1ff;border-radius:14px;padding:18px;display:flex;gap:14px;align-items:center;font-size:.9rem}
+.secure-band .icon{margin:0;flex:none}
+
+/* ---------- Calculator panels ---------- */
+.panel{background:#fff;border-radius:20px;box-shadow:var(--shadow);padding:34px}
+.calc-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:start}
+.field{margin-bottom:20px}
+.field label{display:block;font-weight:700;font-size:.88rem;color:var(--navy);margin-bottom:8px}
+.field input,.field select,.field textarea{width:100%;padding:13px 15px;border:1.5px solid #dde5f2;border-radius:11px;font-size:.95rem;font-family:inherit;color:var(--navy);background:#fbfcff;transition:.2s;outline:none}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(30,94,255,.12);background:#fff}
+input[type=range]{padding:0!important;border:none!important;background:none!important;width:100%;accent-color:var(--blue);cursor:pointer}
+.range-val{font-weight:800;color:var(--blue);float:right}
+.result-box{background:linear-gradient(160deg,#0b1f3a,#153569);color:#fff;border-radius:18px;padding:30px;text-align:center}
+.result-box .big{font-size:2.4rem;font-weight:800;color:#7aa3ff}
+.result-box .lbl{font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:#9db2d8;margin-bottom:6px}
+.mini-stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:22px}
+.mini{background:rgba(255,255,255,.08);border-radius:12px;padding:13px}
+.mini b{display:block;font-size:1.05rem}.mini span{font-size:.72rem;color:#9db2d8;text-transform:uppercase;letter-spacing:.08em}
+.donut-wrap{margin:22px auto 4px;width:170px;height:170px}
+
+/* ---------- Steps ---------- */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;counter-reset:step}
+.step{background:#fff;border-radius:var(--radius);padding:26px;box-shadow:var(--shadow);position:relative;counter-increment:step}
+.step::before{content:counter(step,decimal-leading-zero);position:absolute;top:18px;right:20px;font-size:1.6rem;font-weight:800;color:#e3ebfa}
+.step h4{font-size:.98rem;margin:14px 0 6px}
+.step p{font-size:.84rem;color:var(--muted)}
+
+/* ---------- Forms ---------- */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 22px}
+.form-grid .full{grid-column:1/-1}
+.form-card{max-width:860px;margin:0 auto}
+.notice{display:flex;gap:10px;align-items:center;background:#e6f7f0;color:#0b6b4b;font-size:.82rem;font-weight:600;border-radius:10px;padding:11px 15px;margin-bottom:22px}
+.err{border-color:#e05252!important}
+.hint{font-size:.78rem;color:var(--muted);margin-top:5px}
+
+/* ---------- Eligibility ---------- */
+.elig-wrap{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
+.verdict{border-radius:18px;padding:26px;text-align:center;display:none}
+.verdict.show{display:block;animation:pop .4s ease}
+@keyframes pop{from{transform:scale(.94);opacity:0}to{transform:scale(1);opacity:1}}
+.verdict.ok{background:#e6f7f0;border:2px solid #8fd8bb}
+.verdict.no{background:#fdecec;border:2px solid #f0a8a8}
+.verdict h3{font-size:1.3rem;margin-bottom:6px}
+.score-ring{width:110px;height:110px;border-radius:50%;margin:0 auto 14px;display:grid;place-items:center;font-size:1.5rem;font-weight:800;color:var(--navy);background:conic-gradient(var(--blue) calc(var(--p)*1%),#e3ebfa 0)}
+.score-ring div{width:84px;height:84px;border-radius:50%;background:#fff;display:grid;place-items:center}
+
+/* ---------- Chatbot ---------- */
+.chat-fab{position:fixed;bottom:26px;right:26px;width:62px;height:62px;border-radius:50%;background:var(--grad);color:#fff;font-size:1.6rem;border:none;cursor:pointer;box-shadow:0 12px 30px rgba(30,94,255,.5);z-index:200;transition:.25s;display:grid;place-items:center}
+.chat-fab:hover{transform:scale(1.08)}
+.chat-window{position:fixed;bottom:102px;right:26px;width:min(380px,calc(100vw - 32px));height:520px;max-height:calc(100vh - 140px);background:#fff;border-radius:20px;box-shadow:var(--shadow-lg);z-index:200;display:none;flex-direction:column;overflow:hidden;border:1px solid #e3e9f4}
+.chat-window.open{display:flex;animation:pop .3s ease}
+.chat-head{background:var(--navy);color:#fff;padding:16px 18px;display:flex;align-items:center;gap:12px}
+.chat-head .avatar{width:40px;height:40px;border-radius:50%;background:var(--grad);display:grid;place-items:center;font-size:1.1rem}
+.chat-head b{font-size:.95rem;display:block}
+.chat-head small{color:#9db2d8;font-size:.72rem;display:flex;align-items:center;gap:5px}
+.chat-body{flex:1;overflow-y:auto;padding:16px;background:var(--ice);display:flex;flex-direction:column;gap:10px}
+.msg{max-width:82%;padding:11px 14px;border-radius:14px;font-size:.88rem;line-height:1.5;animation:pop .25s ease;white-space:pre-line}
+.msg.bot{background:#fff;border:1px solid #e6ecf6;border-bottom-left-radius:4px;align-self:flex-start;box-shadow:0 2px 8px rgba(11,31,58,.05)}
+.msg.user{background:var(--blue);color:#fff;border-bottom-right-radius:4px;align-self:flex-end}
+.chips{display:flex;flex-wrap:wrap;gap:8px;padding:0 16px 10px;background:var(--ice)}
+.chip{background:#fff;border:1.5px solid #d8e2f4;color:var(--blue);font-size:.76rem;font-weight:700;padding:7px 13px;border-radius:99px;cursor:pointer;transition:.2s}
+.chip:hover{background:var(--blue);color:#fff;border-color:var(--blue)}
+.chat-input{display:flex;gap:8px;padding:12px;border-top:1px solid #e6ecf6;background:#fff}
+.chat-input input{flex:1;padding:11px 14px;border:1.5px solid #dde5f2;border-radius:11px;font-size:.9rem;outline:none;font-family:inherit}
+.chat-input input:focus{border-color:var(--blue)}
+.chat-input button{width:44px;height:44px;border-radius:11px;background:var(--blue);color:#fff;border:none;cursor:pointer;font-size:1rem}
+.typing{display:flex;gap:4px;padding:12px 14px}
+.typing i{width:7px;height:7px;border-radius:50%;background:#b8c6e2;animation:blink 1.2s infinite}
+.typing i:nth-child(2){animation-delay:.2s}.typing i:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,60%,100%{opacity:.3}30%{opacity:1}}
+
+/* ---------- Status ---------- */
+.status-track{display:flex;justify-content:space-between;margin:30px 0 10px;position:relative}
+.status-track::before{content:"";position:absolute;top:19px;left:8%;right:8%;height:4px;background:#e3e9f4;border-radius:99px;z-index:0}
+.status-fill{position:absolute;top:19px;left:8%;height:4px;background:var(--green);border-radius:99px;z-index:1;transition:width .8s ease;width:0}
+.st-node{position:relative;z-index:2;text-align:center;width:22%}
+.st-dot{width:38px;height:38px;border-radius:50%;background:#e3e9f4;color:#97a5c0;display:grid;place-items:center;margin:0 auto 8px;font-size:.95rem;transition:.3s;border:3px solid var(--ice)}
+.st-node.done .st-dot{background:var(--green);color:#fff}
+.st-node.now .st-dot{background:var(--blue);color:#fff;box-shadow:0 0 0 6px rgba(30,94,255,.2)}
+.st-node span{font-size:.72rem;font-weight:700;color:var(--muted)}
+.st-node.done span,.st-node.now span{color:var(--navy)}
+
+/* ---------- Contact ---------- */
+.contact-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:40px;align-items:start}
+.c-item{display:flex;gap:16px;padding:16px 0;border-bottom:1px solid #e6ecf6}
+.c-item .icon{margin:0;flex:none;width:46px;height:46px;font-size:1.15rem}
+.c-item b{color:var(--navy);display:block;font-size:.92rem}
+.c-item span{font-size:.85rem;color:var(--muted)}
+
+/* ---------- Footer ---------- */
+footer{background:var(--navy);color:#9db2d8;padding:60px 0 0;font-size:.88rem}
+.foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:34px;padding-bottom:44px}
+footer h4{color:#fff;font-size:.95rem;margin-bottom:16px}
+footer a{display:block;padding:5px 0;transition:.2s}footer a:hover{color:#fff}
+.foot-bottom{border-top:1px solid #1d3a63;padding:20px 0;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:.8rem}
+
+/* ---------- Reveal animation ---------- */
+.reveal{opacity:0;transform:translateY(28px);transition:.7s cubic-bezier(.2,.7,.3,1)}
+.reveal.in{opacity:1;transform:none}
+
+/* ---------- Toast ---------- */
+.toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(120px);background:var(--navy);color:#fff;padding:14px 26px;border-radius:12px;font-size:.9rem;font-weight:600;z-index:300;transition:.4s;box-shadow:var(--shadow-lg)}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+/* ---------- Responsive ---------- */
+@media(max-width:1000px){
+  .hero-grid,.about-grid,.calc-grid,.elig-wrap,.contact-grid{grid-template-columns:1fr}
+  .grid-3{grid-template-columns:1fr 1fr}
+  .steps{grid-template-columns:1fr 1fr}
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .foot-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:720px){
+  .nav-links{position:fixed;inset:70px 0 auto 0;background:#fff;flex-direction:column;padding:14px 22px 24px;box-shadow:var(--shadow-lg);transform:translateY(-130%);transition:.35s;border-bottom:1px solid #e6ecf6}
+  .nav-links.open{transform:none}
+  .nav-links a{display:block;padding:12px 10px;font-size:1rem}
+  .hamburger{display:block}
+  .grid-3,.steps,.form-grid{grid-template-columns:1fr}
+  section{padding:60px 0}
+  .status-track{flex-direction:column;gap:18px}
+  .status-track::before,.status-fill{display:none}
+  .st-node{width:100%;display:flex;align-items:center;gap:14px;text-align:left}
+}
+</style>
+</head>
+<body>
+
+<!-- ================= NAVBAR ================= -->
+<header>
+  <div class="container nav">
+    <a class="logo" href="#home"><span class="logo-badge">🤖</span><span>AI <em>Loan</em></span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#loans">Loan Calculator</a></li>
+      <li><a href="#eligibility">Eligibility</a></li>
+      <li><a href="#emi">EMI Calculator</a></li>
+      <li><a href="#apply">Apply</a></li>
+      <li><a href="#status">Status</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div style="display:flex;gap:10px;align-items:center">
+      <a href="#apply" class="btn btn-primary" style="padding:10px 20px">Apply Now</a>
+      <button class="hamburger" id="hamburger" aria-label="Menu">☰</button>
+    </div>
+  </div>
+</header>
+
+<!-- ================= HERO ================= -->
+<section class="hero" id="home" style="padding-top:70px">
+  <div class="container hero-grid">
+    <div class="reveal in">
+      <span class="eyebrow">● AI-Powered Lending</span>
+      <h1>Smart Loans,<br>Decided by <span class="grad">Intelligence</span></h1>
+      <p class="lead">AI Loan uses machine learning to assess your eligibility in seconds, recommend the perfect loan, and give you a transparent EMI plan — no branch visits, no paperwork queues.</p>
+      <div class="hero-cta">
+        <a href="#eligibility" class="btn btn-primary">✓ Check Eligibility</a>
+        <a href="#loans" class="btn btn-outline">Calculate EMI →</a>
+      </div>
+      <div class="trust-row">
+        <div><span class="dot"></span> 256-bit SSL Secure</div>
+        <div><span class="dot"></span> RBI-Compliant Process</div>
+        <div><span class="dot"></span> 60-Second Decisions</div>
+      </div>
+    </div>
+    <div class="hero-card reveal in">
+      <h3>📊 Live Loan Insights <span class="tag" style="margin-left:auto">AI VERIFIED</span></h3>
+      <div class="rate-line"><span>Personal Loan</span><div><b>10.49%</b> <span class="tag">p.a.</span></div></div>
+      <div class="rate-line"><span>Home Loan</span><div><b>8.35%</b> <span class="tag">p.a.</span></div></div>
+      <div class="rate-line"><span>Education Loan</span><div><b>9.20%</b> <span class="tag">p.a.</span></div></div>
+      <div class="rate-line" style="border:none"><span>Business Loan</span><div><b>11.75%</b> <span class="tag">p.a.</span></div></div>
+      <div class="spark">
+        <i style="height:30%"></i><i style="height:45%"></i><i style="height:38%"></i><i style="height:60%"></i><i style="height:52%"></i><i style="height:75%"></i><i style="height:68%"></i><i style="height:90%"></i><i style="height:100%"></i>
+      </div>
+      <small style="color:var(--muted);font-size:.75rem">AI approval-rate forecast · Last updated today</small>
+    </div>
+  </div>
+</section>
+
+<!-- ================= STATS ================= -->
+<div class="stats">
+  <div class="container stats-grid">
+    <div class="stat reveal"><b>₹<i>850</i>Cr+</b><span>Loans Disbursed</span></div>
+    <div class="stat reveal"><b>1.2<i>L+</i></b><span>Happy Customers</span></div>
+    <div class="stat reveal"><b><i>60</i>sec</b><span>Avg. AI Decision Time</span></div>
+    <div class="stat reveal"><b>4.8<i>★</i></b><span>Trust Rating</span></div>
+  </div>
+</div>
+
+<!-- ================= LOAN PRODUCTS / CALCULATOR ================= -->
+<section id="loans">
+  <div class="container">
+    <div class="center reveal">
+      <span class="eyebrow">Loan Products</span>
+      <h2 class="sec-title">Choose a Loan, Watch AI Price It Instantly</h2>
+      <p class="sec-sub">Pick a loan type below. Our AI engine instantly shows your estimated EMI and interest based on your profile band.</p>
+    </div>
+    <div class="grid-3" id="loanCards" style="margin-bottom:56px"></div>
+
+    <div class="calc-grid reveal">
+      <div class="panel">
+        <h3 style="margin-bottom:22px">🧮 AI Loan Calculator</h3>
+        <div class="field">
+          <label>Loan Type</label>
+          <select id="lcType">
+            <option value="personal">Personal Loan</option>
+            <option value="home">Home Loan</option>
+            <option value="education">Education Loan</option>
+            <option value="business">Business Loan</option>
+            <option value="car">Car Loan</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Loan Amount <span class="range-val" id="lcAmtVal">₹5,00,000</span></label>
+          <input type="range" id="lcAmt" min="50000" max="5000000" step="10000" value="500000">
+          <div class="hint">Drag between ₹50K – ₹50L</div>
+        </div>
+        <div class="field">
+          <label>Interest Rate (p.a.) <span class="range-val" id="lcRateVal">10.49%</span></label>
+          <input type="range" id="lcRate" min="7" max="18" step="0.01" value="10.49">
+        </div>
+        <div class="field">
+          <label>Tenure <span class="range-val" id="lcYrsVal">5 years</span></label>
+          <input type="range" id="lcYrs" min="1" max="30" value="5">
+        </div>
+        <button class="btn btn-dark btn-block" onclick="scrollToId('apply')">Proceed to Apply →</button>
+      </div>
+      <div>
+        <div class="result-box">
+          <div class="lbl">Your Estimated EMI</div>
+          <div class="big" id="lcEmi">₹10,744</div>
+          <div class="mini-stats">
+            <div class="mini"><b id="lcPrincipal">₹5,00,000</b><span>Principal</span></div>
+            <div class="mini"><b id="lcInterest">₹1,44,620</b><span>Total Interest</span></div>
+            <div class="mini"><b id="lcTotal">₹6,44,620</b><span>Total Payable</span></div>
+            <div class="mini"><b id="lcBand">Good</b><span>AI Rate Band</span></div>
+          </div>
+        </div>
+        <div class="panel" style="margin-top:22px;padding:22px">
+          <div style="display:flex;align-items:center;gap:12px">
+            <div class="donut-wrap" style="margin:0;width:90px;height:90px;flex:none">
+              <div class="score-ring" id="lcDonut" style="--p:78;width:90px;height:90px"><div style="width:66px;height:66px;font-size:.85rem" id="lcDonutTxt">78%<br>principal</div></div>
+            </div>
+            <p style="font-size:.86rem;color:var(--muted)">AI tip: <b style="color:var(--navy)" id="lcTip">A shorter tenure saves you interest but raises EMI. Try 4 years to save ~₹18,000.</b></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ABOUT ================= -->
+<section id="about" style="background:#fff">
+  <div class="container about-grid">
+    <div class="about-visual reveal">
+      <h3>🧠 How Our AI Decides</h3>
+      <div class="check-item"><span class="ck">✓</span> Analyzes income, credit score &amp; repayment history in real time</div>
+      <div class="check-item"><span class="ck">✓</span> Matches you to the loan product with the highest approval probability</div>
+      <div class="check-item"><span class="ck">✓</span> Personalises your interest rate band — fairer than one-size-fits-all</div>
+      <div class="check-item"><span class="ck">✓</span> Flags document gaps before you apply, cutting rejection risk</div>
+      <div class="check-item"><span class="ck">✓</span> Fully explainable: every decision comes with clear reasons</div>
+    </div>
+    <div class="reveal">
+      <span class="eyebrow">About AI Loan</span>
+      <h2 class="sec-title">Lending That Thinks Ahead of You</h2>
+      <p style="color:var(--muted);margin-bottom:18px">AI Loan is a next-generation digital lending platform built for a college AI project — demonstrating how machine learning models (credit scoring, risk classification, and recommendation engines) can make borrowing faster, fairer, and fully transparent.</p>
+      <p style="color:var(--muted);margin-bottom:18px">From eligibility prediction to EMI optimisation, every screen you see is backed by a rule-based AI engine that adapts to your inputs live.</p>
+      <div class="secure-band">
+        <div class="icon green">🔒</div>
+        <div><b style="color:var(--navy)">Bank-grade security.</b> All data is encrypted end-to-end. We never store passwords or share your information with third parties.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= STEPS ================= -->
+<section>
+  <div class="container">
+    <div class="center reveal">
+      <span class="eyebrow">How It Works</span>
+      <h2 class="sec-title">From Check to Cash in 4 Steps</h2>
+    </div>
+    <div class="steps">
+      <div class="step reveal"><div class="icon">🩺</div><h4>Check Eligibility</h4><p>Answer 5 quick questions — AI predicts your approval odds instantly.</p></div>
+      <div class="step reveal"><div class="icon navy">🧮</div><h4>Compare &amp; Calculate</h4><p>See EMI, interest and tenure breakdowns across all loan types.</p></div>
+      <div class="step reveal"><div class="icon green">📝</div><h4>Apply Online</h4><p>Fill one smart form. AI validates your details as you type.</p></div>
+      <div class="step reveal"><div class="icon amber">💸</div><h4>Get Disbursed</h4><p>Approved? Money hits your account in as little as 24 hours.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ELIGIBILITY ================= -->
+<section id="eligibility" style="background:#fff">
+  <div class="container">
+    <div class="center reveal">
+      <span class="eyebrow">Eligibility Checker</span>
+      <h2 class="sec-title">Will AI Approve You? Find Out in 30 Seconds</h2>
+      <p class="sec-sub">Our scoring model evaluates age, income, credit score and employment type to give an instant prediction.</p>
+    </div>
+    <div class="elig-wrap reveal">
+      <div class="panel">
+        <div class="field"><label>Your Age</label><input type="number" id="egAge" min="18" max="80" value="25" placeholder="18 – 80"></div>
+        <div class="field"><label>Monthly Income (₹)</label><input type="number" id="egIncome" min="0" value="45000" placeholder="e.g. 45000"></div>
+        <div class="field"><label>Credit Score (CIBIL)</label>
+          <select id="egScore">
+            <option value="780">750+ (Excellent)</option>
+            <option value="700" selected>700–749 (Good)</option>
+            <option value="650">650–699 (Fair)</option>
+            <option value="580">Below 650 (Needs Work)</option>
+          </select>
+        </div>
+        <div class="field"><label>Employment Type</label>
+          <select id="egJob">
+            <option value="salaried" selected>Salaried</option>
+            <option value="self">Self-Employed</option>
+            <option value="student">Student</option>
+          </select>
+        </div>
+        <div class="field"><label>Desired Loan Amount (₹)</label><input type="number" id="egAmt" min="10000" value="300000"></div>
+        <button class="btn btn-primary btn-block" onclick="checkEligibility()">✓ Check My Eligibility</button>
+      </div>
+      <div>
+        <div class="verdict" id="verdict"></div>
+        <div class="panel" style="margin-top:0">
+          <h3 style="margin-bottom:14px">📋 General Eligibility Requirements</h3>
+          <div class="check-item" style="color:var(--text)"><span class="ck" style="background:#e7eeff;color:var(--blue)">✓</span> Age between 21 and 60 years</div>
+          <div class="check-item" style="color:var(--text)"><span class="ck" style="background:#e7eeff;color:var(--blue)">✓</span> Minimum monthly income ₹20,000</div>
+          <div class="check-item" style="color:var(--text)"><span class="ck" style="background:#e7eeff;color:var(--blue)">✓</span> Credit score of 650 or above preferred</div>
+          <div class="check-item" style="color:var(--text)"><span class="ck" style="background:#e7eeff;color:var(--blue)">✓</span> 6+ months of stable employment / business</div>
+          <div class="check-item" style="color:var(--text);border:none"><span class="ck" style="background:#e7eeff;color:var(--blue)">✓</span> Valid ID, address &amp; income proof (PAN, Aadhaar, salary slips)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= EMI CALCULATOR ================= -->
+<section id="emi">
+  <div class="container">
+    <div class="center reveal">
+      <span class="eyebrow">EMI Calculator</span>
+      <h2 class="sec-title">Know Your Exact Monthly Outgo</h2>
+      <p class="sec-sub">Fine-tune amount, rate and tenure with a live amortisation preview.</p>
+    </div>
+    <div class="calc-grid reveal">
+      <div class="panel">
+        <div class="field"><label>Principal Amount (₹)</label><input type="number" id="emAmt" value="500000" min="10000"></div>
+        <div class="field"><label>Annual Interest Rate (%)</label><input type="number" id="emRate" value="10.49" step="0.01" min="1"></div>
+        <div class="field"><label>Tenure (Years)</label><input type="number" id="emYrs" value="5" min="1" max="30"></div>
+        <button class="btn btn-dark btn-block" onclick="calcEMI()">Calculate EMI</button>
+      </div>
+      <div class="result-box">
+        <div class="lbl">Monthly EMI</div>
+        <div class="big" id="emOut">₹10,744</div>
+        <div class="mini-stats">
+          <div class="mini"><b id="emTotal">₹6,44,620</b><span>Total Payment</span></div>
+          <div class="mini"><b id="emInt">₹1,44,620</b><span>Total Interest</span></div>
+          <div class="mini"><b id="emFirst">₹4,379</b><span>1st EMI Interest</span></div>
+          <div class="mini"><b id="emLast">₹10,651</b><span>Last EMI Principal</span></div>
+        </div>
+        <canvas id="emiChart" width="360" height="150" style="width:100%;margin-top:20px"></canvas>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= APPLY ================= -->
+<section id="apply" style="background:#fff">
+  <div class="container">
+    <div class="center reveal">
+      <span class="eyebrow">Apply For Loan</span>
+      <h2 class="sec-title">One Smart Form. One Fast Decision.</h2>
+      <p class="sec-sub">AI pre-validates each field. Submit and track your application live from the Status section.</p>
+    </div>
+    <div class="panel form-card reveal">
+      <div class="notice">🔒 Your information is encrypted and used only for this loan application.</div>
+      <form id="applyForm" class="form-grid" onsubmit="return submitApplication(event)">
+        <div class="field"><label>Full Name *</label><input type="text" id="apName" placeholder="e.g. Priya Sharma" required></div>
+        <div class="field"><label>Email *</label><input type="email" id="apEmail" placeholder="you@example.com" required></div>
+        <div class="field"><label>Mobile Number *</label><input type="tel" id="apPhone" placeholder="10-digit mobile" maxlength="10" required></div>
+        <div class="field"><label>Loan Type *</label>
+          <select id="apType">
+            <option value="Personal Loan">Personal Loan</option>
+            <option value="Home Loan">Home Loan</option>
+            <option value="Education Loan">Education Loan</option>
+            <option value="Business Loan">Business Loan</option>
+            <option value="Car Loan">Car Loan</option>
+          </select>
+        </div>
+        <div class="field"><label>Loan Amount (₹) *</label><input type="number" id="apAmt" min="10000" value="500000" required></div>
+        <div class="field"><label>Tenure (Years) *</label><input type="number" id="apTenure" min="1" max="30" value="5" required></div>
+        <div class="field"><label>Annual Interest Rate (%)</label><input type="text" id="apRate" readonly style="background:#eef3ff;font-weight:700;color:var(--blue)"></div>
+        <div class="field"><label>Estimated EMI</label><input type="text" id="apEmi" readonly style="background:#eef3ff;font-weight:700;color:var(--navy)"></div>
+        <div class="field full"><label>Why do you need this loan? (optional)</label><textarea id="apReason" rows="3" placeholder="e.g. Home renovation, tuition fees, working capital..."></textarea></div>
+        <div class="field full" style="display:flex;align-items:center;gap:10px;font-size:.85rem;color:var(--muted)">
+          <input type="checkbox" id="apConsent" required style="width:auto"> I agree to the terms and consent to an AI-based credit assessment.
+        </div>
+        <div class="full"><button type="submit" class="btn btn-primary btn-block" style="padding:15px">🚀 Submit Application</button></div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ================= STATUS ================= -->
+<section id="status">
+  <div class="container">
+    <div class="center reveal">
+      <span class="eyebrow">Application Status</span>
+      <h2 class="sec-title">Track Your Application Live</h2>
+      <p class="sec-sub">Enter your Application ID (shown after you apply) to see exactly where your file is.</p>
+    </div>
+    <div class="panel form-card reveal" style="text-align:center">
+      <div style="display:flex;gap:12px;max-width:520px;margin:0 auto 26px">
+        <input type="text" id="stInput" placeholder="e.g. AL-2026-XXXX" style="flex:1;padding:13px 15px;border:1.5px solid #dde5f2;border-radius:11px;font-size:.95rem;outline:none;text-transform:uppercase">
+        <button class="btn btn-dark" onclick="trackStatus()">Track</button>
+      </div>
+      <div id="stResult" style="display:none">
+        <div class="status-track">
+          <div class="status-fill" id="stFill"></div>
+          <div class="st-node" data-step="1"><div class="st-dot">📝</div><span>Submitted</span></div>
+          <div class="st-node" data-step="2"><div class="st-dot">🧠</div><span>AI Review</span></div>
+          <div class="st-node" data-step="3"><div class="st-dot">✅</div><span>Approved</span></div>
+          <div class="st-node" data-step="4"><div class="st-dot">💸</div><span>Disbursed</span></div>
+        </div>
+        <p id="stMsg" style="font-weight:700;color:var(--navy)"></p>
+      </div>
+      <p id="stNone" style="color:var(--muted);font-size:.88rem">No application tracked yet. Apply above to get your ID.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CONTACT ================= -->
+<section id="contact" style="background:#fff">
+  <div class="container">
+    <div class="center reveal">
+      <span class="eyebrow">Contact Us</span>
+      <h2 class="sec-title">We're Here to Help</h2>
+    </div>
+    <div class="contact-grid reveal">
+      <div>
+        <div class="c-item"><div class="icon">📞</div><div><b>Call Us</b><span>1800-123-AILOAN (toll-free, 9AM–9PM)</span></div></div>
+        <div class="c-item"><div class="icon navy">✉️</div><div><b>Email</b><span>support@ailoan.in</span></div></div>
+        <div class="c-item"><div class="icon green">📍</div><div><b>Head Office</b><span>AI Loan Tower, Sector 62, Noida, UP 201301</span></div></div>
+        <div class="c-item" style="border:none"><div class="icon amber">💬</div><div><b>AI Assistant</b><span>Chat with our bot anytime — bottom-right corner.</span></div></div>
+      </div>
+      <div class="panel">
+        <div class="field"><label>Name</label><input type="text" id="ctName" placeholder="Your name"></div>
+        <div class="field"><label>Email</label><input type="email" id="ctEmail" placeholder="you@example.com"></div>
+        <div class="field"><label>Message</label><textarea id="ctMsg" rows="4" placeholder="How can we help?"></textarea></div>
+        <button class="btn btn-primary btn-block" onclick="sendContact()">Send Message ✈️</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer>
+  <div class="container">
+    <div class="foot-grid">
+      <div>
+        <a class="logo" href="#home" style="color:#fff;margin-bottom:14px"><span class="logo-badge">🤖</span><span>AI <em>Loan</em></span></a>
+        <p style="font-size:.85rem;margin-top:12px">AI-powered lending for the next generation. Fast, fair, and fully transparent.</p>
+      </div>
+      <div><h4>Products</h4><a href="#loans">Personal Loan</a><a href="#loans">Home Loan</a><a href="#loans">Education Loan</a><a href="#loans">Business Loan</a></div>
+      <div><h4>Tools</h4><a href="#emi">EMI Calculator</a><a href="#eligibility">Eligibility Checker</a><a href="#status">Track Application</a><a href="#" onclick="openChat();return false">AI Assistant</a></div>
+      <div><h4>Company</h4><a href="#about">About Us</a><a href="#contact">Contact</a><a href="#">Privacy Policy</a><a href="#">Terms of Service</a></div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 AI Loan. A college AI project demonstration. Not a real lender.</span>
+      <span>🔒 Secured with 256-bit encryption</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ================= CHATBOT ================= -->
+<button class="chat-fab" id="chatFab" onclick="toggleChat()" aria-label="AI Assistant">🤖</button>
+<div class="chat-window" id="chatWindow">
+  <div class="chat-head">
+    <div class="avatar">🤖</div>
+    <div><b>AI Loan Assistant</b><small><span class="dot" style="width:7px;height:7px"></span> Online · replies instantly</small></div>
+    <button onclick="toggleChat()" style="margin-left:auto;background:none;border:none;color:#9db2d8;font-size:1.2rem;cursor:pointer">✕</button>
+  </div>
+  <div class="chat-body" id="chatBody"></div>
+  <div class="chips" id="chips"></div>
+  <div class="chat-input">
+    <input type="text" id="chatText" placeholder="Ask about loans, EMI, eligibility..." onkeydown="if(event.key==='Enter')sendUser()">
+    <button onclick="sendUser()">➤</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============ Helpers ============ */
+const fmt = n => '₹' + Math.round(n).toLocaleString('en-IN');
+const scrollToId = id => document.getElementById(id).scrollIntoView({behavior:'smooth'});
+function toast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3200); }
+
+/* ============ Navbar ============ */
+const hamburger=document.getElementById('hamburger'), navLinks=document.getElementById('navLinks');
+hamburger.onclick=()=>navLinks.classList.toggle('open');
+navLinks.querySelectorAll('a').forEach(a=>a.onclick=()=>navLinks.classList.remove('open'));
+
+/* ============ Reveal on scroll ============ */
+const io=new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);} }),{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+/* ============ EMI math ============ */
+function emiCalc(P, annual, years){
+  const r=annual/1200, n=years*12;
+  if(r===0) return P/n;
+  return P*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1);
+}
+
+/* ============ Loan products ============ */
+const PRODUCTS=[
+ {k:'personal',icon:'💼',cls:'',name:'Personal Loan',rate:'10.49%',desc:'Instant funds for weddings, travel, medical needs or debt consolidation.',min:'₹50K',max:'₹25L'},
+ {k:'home',icon:'🏠',cls:'navy',name:'Home Loan',rate:'8.35%',desc:'Lowest rates for buying, building or renovating your dream home.',min:'₹5L',max:'₹5Cr'},
+ {k:'education',icon:'🎓',cls:'green',name:'Education Loan',rate:'9.20%',desc:'Study in India or abroad with flexible repayment after course completion.',min:'₹1L',max:'₹1.5Cr'},
+ {k:'business',icon:'📈',cls:'amber',name:'Business Loan',rate:'11.75%',desc:'Working capital and expansion finance for growing enterprises.',min:'₹1L',max:'₹2Cr'},
+ {k:'car',icon:'🚗',cls:'',name:'Car Loan',rate:'8.90%',desc:'Drive home a new or used car with up to 90% on-road funding.',min:'₹1L',max:'₹50L'},
+ {k:'gold',icon:'🪙',cls:'navy',name:'Gold Loan',rate:'9.50%',desc:'Unlock the value of your gold with same-day disbursal.',min:'₹25K',max:'₹50L'}
+];
+document.getElementById('loanCards').innerHTML = PRODUCTS.map(p=>`
+ <div class="card reveal">
+   <div class="icon ${p.cls}">${p.icon}</div>
+   <h3>${p.name}</h3>
+   <p>${p.desc}</p>
+   <p style="margin-top:12px;font-size:.85rem"><b style="color:var(--navy)">${p.rate}</b> <span style="color:var(--muted)">p.a. · ${p.min} – ${p.max}</span></p>
+   <a href="#loans" class="pill" onclick="selectLoan('${p.k}')">Calculate &amp; Apply →</a>
+ </div>`).join('');
+function selectLoan(k){ document.getElementById('lcType').value=k; syncLoanCalc(); }
+
+/* ============ Loan calculator ============ */
+const RATES={personal:10.49,home:8.35,education:9.20,business:11.75,car:8.90,gold:9.50};
+const lcAmt=document.getElementById('lcAmt'), lcRate=document.getElementById('lcRate'), lcYrs=document.getElementById('lcYrs'), lcType=document.getElementById('lcType');
+function syncLoanCalc(){
+  const P=+lcAmt.value, annual=+lcRate.value, y=+lcYrs.value;
+  lcAmtVal.textContent=fmt(P); lcRateVal.textContent=annual.toFixed(2)+'%'; lcYrsVal.textContent=y+' '+(y>1?'years':'year');
+  const e=emiCalc(P,annual,y), total=e*y*12, interest=total-P;
+  lcEmi.textContent=fmt(e); lcPrincipal.textContent=fmt(P); lcInterest.textContent=fmt(interest); lcTotal.textContent=fmt(total);
+  const pct=Math.round(P/total*100);
+  lcDonut.style.setProperty('--p',pct); lcDonutTxt.innerHTML=pct+'%<br>principal';
+  lcBand.textContent = annual<=9?'Excellent':annual<=10.5?'Good':annual<=12?'Fair':'High';
+  lcTip.textContent = y>=10 ? 'A shorter tenure saves a lot of interest. Try halving the tenure to cut total interest sharply.' :
+                    `At this rate, every extra year costs ~${fmt(interest/y)} in interest. Shorter tenure = big savings.`;
+  // sync apply form
+  apRate.value=annual.toFixed(2); apEmi.value=fmt(e)+' / month';
+  drawMiniChart(P,interest);
+}
+[lcAmt,lcRate,lcYrs].forEach(el=>el.addEventListener('input',syncLoanCalc));
+lcType.addEventListener('change',()=>{ lcRate.value=RATES[lcType.value]; syncLoanCalc(); });
+function drawMiniChart(P,I){
+  const c=document.getElementById('emiChart'); if(!c)return;
+  const x=c.getContext('2d'); x.clearRect(0,0,c.width,c.height);
+  const tot=P+I, w=c.width-20, x0=10, y=55, h=34;
+  x.fillStyle='#1e5eff'; x.beginPath(); x.roundRect(x0,y,w*P/tot,h,7); x.fill();
+  x.fillStyle='#5b8bff'; x.beginPath(); x.roundRect(x0+w*P/tot+4,y,w*I/tot-4,h,7); x.fill();
+  x.fillStyle='#9db2d8'; x.font='12px Segoe UI';
+  x.fillText('■ Principal '+fmt(P),x0,y+h+24); x.fillStyle='#5b8bff';
+  x.fillText('■ Interest '+fmt(I),x0+190,y+h+24);
+}
+syncLoanCalc();
+
+/* ============ EMI section ============ */
+function calcEMI(){
+  const P=+emAmt.value||0, rate=+emRate.value||0, y=+emYrs.value||1;
+  if(P<10000){ toast('Enter an amount of at least ₹10,000'); return; }
+  const e=emiCalc(P,rate,y), tot=e*y*12, r=rate/1200, firstInt=P*r;
+  emOut.textContent=fmt(e); emTotal.textContent=fmt(tot); emInt.textContent=fmt(tot-P);
+  emFirst.textContent=fmt(firstInt); emLast.textContent=fmt(e/(Math.pow(1+r,y*12)));
+  drawMiniChart(P,tot-P);
+}
+['emAmt','emRate','emYrs'].forEach(id=>document.getElementById(id).addEventListener('input',calcEMI));
+calcEMI();
+
+/* ============ Eligibility AI ============ */
+function checkEligibility(){
+  const age=+egAge.value||0, inc=+egIncome.value||0, score=+egScore.value, job=egJob.value, amt=+egAmt.value||0;
+  let s=0; const reasons=[];
+  if(age>=21&&age<=60){s+=25}else{reasons.push('age must be 21–60');}
+  if(inc>=50000)s+=30; else if(inc>=25000)s+=20; else if(inc>=15000)s+=10; else reasons.push('income below ₹15,000/month');
+  if(score>=750)s+=30; else if(score>=700)s+=25; else if(score>=650)s+=15; else reasons.push('credit score below 650');
+  s+= job==='salaried'?10: job==='self'?8:5;
+  if(amt<=inc*20)s+=5; else reasons.push('requested amount is high vs income (max ~20× monthly income)');
+  const ok=s>=65, verdict=document.getElementById('verdict');
+  verdict.className='verdict show '+(ok?'ok':'no');
+  verdict.innerHTML=`
+    <div class="score-ring" style="--p:${Math.min(s,100)}"><div>${Math.min(s,100)}<span style="font-size:.7rem;color:var(--muted)">/100</span></div></div>
+    <h3>${ok?'🎉 Great news — You are likely eligible!':'⚠️ Approval looks unlikely right now'}</h3>
+    <p style="font-size:.88rem;color:var(--muted)">${ok
+      ? `AI score <b>${s}/100</b>. You pre-qualify for up to ~<b>${fmt(Math.max(inc*20,100000))}</b>. Apply now to lock your rate.`
+      : `AI score <b>${s}/100</b>. Improve: ${reasons.slice(0,2).join('; ')}. Try a smaller amount or build your credit first.`}</p>
+    <div style="margin-top:16px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+      ${ok?'<button class="btn btn-green" onclick="prefillApply('+amt+')">Apply Now →</button>':'<button class="btn btn-outline" onclick="openChat()">Ask AI How to Improve</button>'}
+    </div>`;
+}
+function prefillApply(amt){ apAmt.value=amt; scrollToId('apply'); }
+
+/* ============ Apply form ============ */
+function submitApplication(e){
+  e.preventDefault();
+  const name=apName.value.trim(), email=apEmail.value.trim(), phone=apPhone.value.trim();
+  if(!/^\d{10}$/.test(phone)){ apPhone.classList.add('err'); toast('Enter a valid 10-digit mobile number'); return false; }
+  apPhone.classList.remove('err');
+  const id='AL-2026-'+Math.floor(1000+Math.random()*9000);
+  const apps=JSON.parse(localStorage.getItem('ailoan_apps')||'{}');
+  apps[id]={name,type:apType.value,amt:+apAmt.value,tenure:+apTenure.value,rate:+apRate.value,emi:apEmi.value,email,phone,step:2,date:new Date().toLocaleDateString('en-IN')};
+  localStorage.setItem('ailoan_apps',JSON.stringify(apps));
+  toast('✅ Application submitted! ID: '+id);
+  document.getElementById('stInput').value=id;
+  trackStatus();
+  setTimeout(()=>scrollToId('status'),600);
+  e.target.reset(); apAmt.value=500000; apTenure.value=5; syncLoanCalc();
+  return false;
+}
+
+/* ============ Status tracker ============ */
+function trackStatus(){
+  const id=stInput.value.trim().toUpperCase(), apps=JSON.parse(localStorage.getItem('ailoan_apps')||'{}');
+  const app=apps[id];
+  stNone.style.display='none'; stResult.style.display='none';
+  if(!app){ stNone.style.display='block'; stNone.textContent='❌ No application found for ID "'+id+'". Check the ID or apply first.'; return; }
+  stResult.style.display='block';
+  document.querySelectorAll('.st-node').forEach(n=>{
+    const s=+n.dataset.step; n.classList.toggle('done',s<app.step); n.classList.toggle('now',s===app.step);
+  });
+  stFill.style.width=((app.step-1)/3*84)+'%';
+  const msgs={1:'📨 Application received. AI review starts shortly.',2:'🧠 AI is analyzing your profile — usually under 60 seconds.',3:'✅ Approved! Disbursal is being processed.',4:'💸 Amount disbursed to your account. Thank you for choosing AI Loan!'};
+  stMsg.textContent=msgs[app.step]+` — ${app.name}, ${app.type} of ${fmt(app.amt)} (applied ${app.date})`;
+}
+
+/* ============ Contact ============ */
+function sendContact(){
+  if(!ctName.value.trim()||!ctEmail.value.includes('@')||!ctMsg.value.trim()){ toast('Please fill in name, a valid email and your message.'); return; }
+  ctName.value=ctEmail.value=ctMsg.value='';
+  toast('✉️ Message sent! Our team will reply within 24 hours.');
+}
+
+/* ============ AI Chatbot ============ */
+const chatBody=document.getElementById('chatBody'), chipsBox=document.getElementById('chips');
+const CHIPS=['Am I eligible?','EMI for ₹5L','Interest rates','How do I apply?','Loan types','Documents needed'];
+function toggleChat(){ const w=document.getElementById('chatWindow'); w.classList.toggle('open'); if(w.classList.contains('open')&&!chatBody.children.length) botSay("👋 Hi! I'm your AI Loan Assistant.\n\nI can explain loan options, check eligibility, estimate EMIs and guide your application. What would you like to know?"); }
+function openChat(){ const w=document.getElementById('chatWindow'); if(!w.classList.contains('open')) toggleChat(); }
+function renderChips(){ chipsBox.innerHTML=CHIPS.map(c=>`<button class="chip" onclick="ask('${c}')">${c}</button>`).join(''); }
+function bubble(txt,cls){ const d=document.createElement('div'); d.className='msg '+cls; d.textContent=txt; chatBody.appendChild(d); chatBody.scrollTop=chatBody.scrollHeight; return d; }
+function botSay(txt){ const t=bubble('','bot'); t.classList.add('typing'); t.innerHTML='<i></i><i></i><i></i>';
+  setTimeout(()=>{ t.classList.remove('typing'); t.textContent=txt; chatBody.scrollTop=chatBody.scrollHeight; },650+Math.random()*500); }
+function ask(q){ chatText.value=q; sendUser(); }
+function sendUser(){
+  const inp=document.getElementById('chatText'), q=inp.value.trim(); if(!q)return;
+  bubble(q,'user'); inp.value=''; setTimeout(()=>botSay(botReply(q)),300);
+}
+function botReply(raw){
+  const q=raw.toLowerCase();
+  const has=(...w)=>w.some(x=>q.includes(x));
+  if(has('hi','hello','hey','namaste')) return "Hello! 😊 Ask me about loan types, eligibility, EMI calculations, interest rates or how to apply.";
+  if(has('eligib','qualif','approve','can i get','am i')) return "Basic eligibility at AI Loan:\n• Age 21–60\n• Income ≥ ₹20,000/month\n• Credit score ≥ 650 preferred\n• Stable job/business 6+ months\n\nTry the Eligibility Checker above — it gives an AI score in seconds!";
+  if(has('emi','installment','monthly pay')){ const e=emiCalc(500000,10.49,5); return `For ₹5,00,000 at 10.49% over 5 years, your EMI would be about ${fmt(e)}/month.\n\nUse the EMI Calculator section to try any amount, rate or tenure — it's live!`; }
+  if(has('rate','interest','apr','percent')) return "Current AI-personalised rates:\n💼 Personal — 10.49% p.a.\n🏠 Home — 8.35% p.a.\n🎓 Education — 9.20% p.a.\n📈 Business — 11.75% p.a.\n🚗 Car — 8.90% p.a.\n\nYour final rate depends on your AI credit band.";
+  if(has('apply','application','how do i','start')) return "Applying is easy:\n1️⃣ Check eligibility (30 sec)\n2️⃣ Calculate your EMI\n3️⃣ Fill the Apply form\n4️⃣ Get an Application ID and track it live in the Status section.\n\nTap 'Apply Now' in the top menu to begin!";
+  if(has('type','kinds','kinds of','options','which loan')) return "We offer:\n💼 Personal — weddings, travel, emergencies\n🏠 Home — buy/build/renovate\n🎓 Education — India & abroad\n📈 Business — working capital\n🚗 Car — new & used\n🪙 Gold — same-day funds\n\nWhich one fits your goal?";
+  if(has('document','kyc','paper','pan','aadhaar')) return "Standard documents:\n• PAN card\n• Aadhaar / address proof\n• Last 3 salary slips or ITR\n• 6-month bank statement\n• Photo\n\nOur AI flags any missing document before submission — fewer rejections!";
+  if(has('status','track','where is my')) return "Go to the 'Application Status' section and enter your Application ID (format AL-2026-XXXX). You'll see live progress from submission to disbursal.";
+  if(has('score','cibil','credit')) return "A credit score of 750+ gets our best rates. 700–749 is still strong. Below 650? Try a smaller loan amount, add a co-applicant, or build credit with a secured card first.";
+  if(has('secure','safe','privacy','trust','real')) return "Great question! This is a college AI project demo — no real money is involved. In a production system, we'd use 256-bit encryption and RBI-compliant KYC. All rates shown are illustrative.";
+  if(has('thank','thanks','great')) return "You're welcome! 😊 Anything else — EMI, eligibility, or the application steps?";
+  if(has('human','agent','call','support')) return "You can reach our team at 1800-123-AILOAN or support@ailoan.in (9AM–9PM). Or just keep chatting with me — I'm faster! ⚡";
+  return "Hmm, I don't have that one yet. Try asking about:\n• Eligibility requirements\n• EMI calculation\n• Interest rates\n• Loan types\n• Documents\n• How to apply";
+}
+renderChips();
+</script>
+</body>
+</html>
